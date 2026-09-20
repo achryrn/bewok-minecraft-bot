@@ -13,6 +13,6 @@ public class PlayerNegotiationHandler {
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         String username = event.getEntity().getGameProfile().getName();
-        // Logged in — whitelist check already passed via EntityJoinLevelEvent
+        // Logged in - whitelist check already passed via EntityJoinLevelEvent
     }
 }
