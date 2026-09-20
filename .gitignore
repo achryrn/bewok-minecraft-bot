@@ -17,6 +17,15 @@ archive/
 .claude/
 github-token.txt
 
+# vendored forge template VCS metadata (never pushed)
+forge-mod/.github/
+forge-mod/.gitattributes
+forge-mod/.gitignore
+
+# gradle local build state
+.gradle/
+forge-mod/build/
+
 # OS junk
 .DS_Store
 Thumbs.db
