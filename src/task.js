@@ -29,7 +29,7 @@ class Task {
     this.updatedAt = Date.now();
   }
 
-  /** Register a retry — used by the executor when an action is re-attempted. */
+  /** Register a retry - used by the executor when an action is re-attempted. */
   retry(err) {
     this.attempts++;
     if (err) this.lastError = err instanceof Error ? err.message : String(err);
@@ -39,7 +39,7 @@ class Task {
   static _counter = 0;
 
   start() {
-    if (this.status !== 'pending') throw new Error(`Cannot start task ${this.id} — status is ${this.status}`);
+    if (this.status !== 'pending') throw new Error(`Cannot start task ${this.id} - status is ${this.status}`);
     this.status = 'running';
     this.startedAt = Date.now();
     return this;
@@ -112,7 +112,7 @@ class TaskManager extends EventEmitter {
     super();
     // Support both: TaskManager(bot, persistPath) and TaskManager(options)
     if (firstArg && typeof firstArg === 'object' && !firstArg._client && !firstArg.write && !firstArg.on) {
-      // Called as TaskManager(options) — backward compat with queue-style tests
+      // Called as TaskManager(options) - backward compat with queue-style tests
       this.bot = null;
       this.persistPath = './data/task-state.json';
       this._executor = firstArg.executor || null;
@@ -132,7 +132,7 @@ class TaskManager extends EventEmitter {
     this._scheduled = false;
   }
 
-  /* ───── Persistence ───── */
+  /* ----- Persistence ----- */
 
   loadFromDisk() {
     try {
@@ -168,7 +168,7 @@ class TaskManager extends EventEmitter {
     }
   }
 
-  /* ───── Single-task lifecycle (used by brain) ───── */
+  /* ----- Single-task lifecycle (used by brain) ----- */
 
   startTask(type, args, requestedBy) {
     if (this.currentTask && this.currentTask.status === 'running') {
@@ -233,7 +233,7 @@ class TaskManager extends EventEmitter {
     return !this._cancelFlag && this.currentTask && this.currentTask.status === 'running';
   }
 
-  /* ───── Queue (compatibility with TaskManager tests) ───── */
+  /* ----- Queue (compatibility with TaskManager tests) ----- */
 
   get idle() { return !this._processing && this._queue.length === 0; }
 
@@ -343,6 +343,6 @@ class TaskManager extends EventEmitter {
     }
   }
 }
-// Remove legacy EventEmitter mixin at bottom — using extends now
+// Remove legacy EventEmitter mixin at bottom - using extends now
 
 module.exports = { Task, TaskManager };

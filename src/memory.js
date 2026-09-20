@@ -1,6 +1,6 @@
 'use strict';
 /**
- * memory.js — persistent, self-improving memory for the bot.
+ * memory.js - persistent, self-improving memory for the bot.
  *
  * The bot writes facts, lessons, locations and conversation history to a JSON
  * file so it can:
@@ -25,9 +25,9 @@ class BotMemory {
   constructor(filePath, maxLessons = 300) {
     this.filePath = filePath || './memory.json';
     this.maxLessons = maxLessons || 300;
-    this._seq = 0; // monotonic insertion counter — deterministic recency tie-break
+    this._seq = 0; // monotonic insertion counter - deterministic recency tie-break
     this.data = {
-      facts: {},          // key → value  (durable knowledge)
+      facts: {},          // key -> value  (durable knowledge)
       notes: [],          // [{id, text, ts, tags:[], count}]  (free-form learnings)
       locations: [],      // [{type, x, y, z, dim, ts, quality}]  (known places)
       history: [],        // [{role:'player'|'bot', text, ts}]  (short-term conversation)
@@ -42,7 +42,7 @@ class BotMemory {
     this.load();
   }
 
-  /* ───── Persistence ───── */
+  /* ----- Persistence ----- */
 
   load() {
     try {
@@ -74,7 +74,7 @@ class BotMemory {
     }
   }
 
-  /* ───── Facts ───── */
+  /* ----- Facts ----- */
 
   setFact(key, value) {
     this.data.facts[key] = value;
@@ -98,7 +98,7 @@ class BotMemory {
     return { ...this.data.facts };
   }
 
-  /* ───── Lessons (self-improvement) ───── */
+  /* ----- Lessons (self-improvement) ----- */
 
   /**
    * Record a lesson. Same lesson text/category is deduplicated (count++).
@@ -132,7 +132,7 @@ class BotMemory {
   }
 
   /**
-   * Recall the most relevant lessons — recency + count weighted.
+   * Recall the most relevant lessons - recency + count weighted.
    * @param {number} limit
    * @param {string[]} [filterTags]
    */
@@ -157,7 +157,7 @@ class BotMemory {
     this.data.notes = this.data.notes.slice(0, this.maxLessons);
   }
 
-  /* ───── Locations ───── */
+  /* ----- Locations ----- */
 
   rememberLocation(type, x, y, z, dim, quality) {
     if (!type || x === undefined || y === undefined || z === undefined) return null;
@@ -186,7 +186,7 @@ class BotMemory {
     return best;
   }
 
-  /* ───── Conversation history ───── */
+  /* ----- Conversation history ----- */
 
   pushHistory(role, text) {
     if (!text) return;
@@ -203,7 +203,7 @@ class BotMemory {
     this.save();
   }
 
-  /* ───── Stats ───── */
+  /* ----- Stats ----- */
 
   bumpStat(key, by = 1) {
     if (!this.data.stats[key]) this.data.stats[key] = 0;

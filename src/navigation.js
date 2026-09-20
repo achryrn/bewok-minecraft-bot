@@ -2,7 +2,7 @@ const { pathfinder, Movements } = require('mineflayer-pathfinder');
 const { GoalNear, GoalBlock, GoalFollow, GoalXZ } = require('mineflayer-pathfinder').goals;
 
 /**
- * NavigationController — wraps mineflayer-pathfinder with collision recovery,
+ * NavigationController - wraps mineflayer-pathfinder with collision recovery,
  * stuck detection, and smart obstacle handling.
  *
  * Per CLAUDE.md v3 "Navigation and Collision Recovery" section.
@@ -29,7 +29,7 @@ class NavigationController {
     this._listenPathUpdate();
   }
 
-  /** Update Movements config — call on every spawn. */
+  /** Update Movements config - call on every spawn. */
   _updateMovements() {
     if (!this._mcData) this._mcData = require('minecraft-data')(this.bot.version);
     const mv = new Movements(this.bot, this._mcData);
@@ -41,7 +41,7 @@ class NavigationController {
     mv.digCost = 0;
     mv.placeCost = 0;
     mv.allowParkourPlacing = false;
-    // Increase how far the bot considers "reachable" — avoids premature "noPath"
+    // Increase how far the bot considers "reachable" - avoids premature "noPath"
     mv.maxFallHeight = 8;
     this.bot.pathfinder.setMovements(mv);
   }
@@ -50,7 +50,7 @@ class NavigationController {
   _listenPathUpdate() {
     this.bot.on('path_update', (data) => {
       if (data.status === 'noPath' && this._pendingResolve && !this._recovering) {
-        console.log('[nav] path_update: noPath — attempting recovery');
+        console.log('[nav] path_update: noPath - attempting recovery');
         this._recover();
       }
     });
@@ -68,7 +68,7 @@ class NavigationController {
 
   /**
    * Navigate to (x, y, z) with a given radius.
-   * Returns Promise<boolean> — true if reached, false if gave up.
+   * Returns Promise<boolean> - true if reached, false if gave up.
    */
   async goto(x, y, z, radius = 2) {
     if (this._stopped) return false;
@@ -133,11 +133,11 @@ class NavigationController {
 
       if (dx < 0.5 && dz < 0.5) {
         this._stuckCount++;
-        console.log(`[nav] Stuck check ${this._stuckCount}/6 — moved <0.5 blocks`);
+        console.log(`[nav] Stuck check ${this._stuckCount}/6 - moved <0.5 blocks`);
 
         if (this._stuckCount >= 6 && !this._recovering) {
-          // 12s with no real movement → stuck
-          console.log('[nav] Stuck detected — attempting recovery');
+          // 12s with no real movement -> stuck
+          console.log('[nav] Stuck detected - attempting recovery');
           this._recover();
         }
       } else {
@@ -155,7 +155,7 @@ class NavigationController {
     }
   }
 
-  /** Recovery sequence: jump → recompute → dig → random point → give up. */
+  /** Recovery sequence: jump -> recompute -> dig -> random point -> give up. */
   async _recover() {
     if (this._recovering) return;
     this._recovering = true;
@@ -180,7 +180,7 @@ class NavigationController {
         const dz = Math.abs(pos.z - this._lastPos.z);
 
         if (dx > 0.5 || dz > 0.5) {
-          // Moving again — done
+          // Moving again - done
           this._recovering = false;
           this._startStuckTimer();
           return;
@@ -224,7 +224,7 @@ class NavigationController {
         this._startStuckTimer();
       }
 
-      // Reset recovery flag — if stuck again, will retry
+      // Reset recovery flag - if stuck again, will retry
       this._stuckCount = 0;
     } catch (err) {
       console.log('[nav] Recovery error:', err.message);

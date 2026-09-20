@@ -31,7 +31,7 @@ class FabricHandler extends EventEmitter {
         // Skip the first byte (varint length prefix) and convert the rest to string
         const brand = packet.data ? packet.data.toString('utf8').slice(1) : '';
         if (FabricHandler.isFabricBrand(brand)) {
-          console.log(`[fabric] Brand "${brand}" detected — no special handshake required`);
+          console.log(`[fabric] Brand "${brand}" detected - no special handshake required`);
           this.emit('detected', brand);
         }
       }

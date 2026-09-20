@@ -13,7 +13,7 @@ async function main() {
     process.exit(1);
   }
 
-  console.log('[bot] minecraft-bot v1.1 — ' + (config.auth === 'offline' ? 'offline/cracked mode' : config.auth + ' auth') +
+  console.log('[bot] minecraft-bot v1.1 - ' + (config.auth === 'offline' ? 'offline/cracked mode' : config.auth + ' auth') +
     (config.versionAutoDetect ? ' | version: auto-detect' : ' | version: ' + (config.version || 'auto')) +
     ' | target: ' + config.host + ':' + config.port);
 
@@ -25,9 +25,9 @@ async function main() {
       const start = Date.now();
       const detection = await detectServerVersion(config.host, config.port, 6000);
       const resolved = resolveBotVersion(config, detection);
-      console.log('[smoke] ping ' + (Date.now() - start) + 'ms — ' +
+      console.log('[smoke] ping ' + (Date.now() - start) + 'ms - ' +
         (detection.rawVersion ? 'server reports "' + detection.rawVersion + '"' : 'server ping: ' + (detection.error || 'no version info')) +
-        ' → connect with version: ' + String(resolved.version) + ' (source: ' + resolved.source + ')');
+        ' -> connect with version: ' + String(resolved.version) + ' (source: ' + resolved.source + ')');
       console.log('[smoke] config OK, launcher OK.');
       process.exit(0);
     } catch (err) {

@@ -49,8 +49,8 @@ class ForgeHandler extends EventEmitter {
     // autoVersionForge may set it too late for the Handshake packet.
     client.tagHost = '\0FML3\0';
 
-    // Install FML3 handler directly — autoVersionForge won't ping if version is set.
-    // Do NOT pass channels or registries — let forgeHandshake3 mirror the server's data
+    // Install FML3 handler directly - autoVersionForge won't ping if version is set.
+    // Do NOT pass channels or registries - let forgeHandshake3 mirror the server's data
     const forgeHandshake3 = require('minecraft-protocol-forge/src/client/forgeHandshake3');
     forgeHandshake3(client, { forgeMods: [] });
 
@@ -58,7 +58,7 @@ class ForgeHandler extends EventEmitter {
     // 'fml:loginwrapper' channel. Any other login-phase plugin channel
     // (SkinRestorer, ModernFix, etc. on this server) is logged and silently
     // dropped, with no login_plugin_response ever sent. The Minecraft login
-    // protocol requires a response to every login_plugin_request — omitting
+    // protocol requires a response to every login_plugin_request - omitting
     // one desyncs the server's sequential index tracking for the handshake,
     // producing "Recieved unexpected index N in client reply" server-side.
     // This mirrors node-minecraft-protocol's own default handler (removed
@@ -84,7 +84,7 @@ class ForgeHandler extends EventEmitter {
       console.log('[forge] FML3 handshake complete');
       this.emit('complete');
 
-      // Remove the FML3 login_plugin_request handler — no longer needed
+      // Remove the FML3 login_plugin_request handler - no longer needed
       try {
         const fmlHandler = client.listeners('login_plugin_request')
           .find(fn => fn.name === 'onFmlLoginPluginRequest');
@@ -106,13 +106,13 @@ class ForgeHandler extends EventEmitter {
     this.failCount++;
     this.handshakeFailed = true;
 
-    console.warn('[warn] Forge handshake failed — retrying connection');
+    console.warn('[warn] Forge handshake failed - retrying connection');
     if (this.config.debug) {
       console.log(`[forge] FML error: ${err.message}`);
     }
 
     if (this.failCount >= 3) {
-      console.error('[error] Forge handshake failed 3 times — the server may require specific mods');
+      console.error('[error] Forge handshake failed 3 times - the server may require specific mods');
       console.error('[error] Stopping reconnect attempts');
       this.emit('permanentFailure');
     }

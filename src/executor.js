@@ -1,6 +1,6 @@
 'use strict';
 /**
- * executor.js — retry / failsafe wrapper around every bot action.
+ * executor.js - retry / failsafe wrapper around every bot action.
  *
  * Requirements driving this file:
  *   - "retry upon failure": every action gets a bounded, backoff retry loop,
@@ -143,7 +143,7 @@ class ActionExecutor {
           maxRetries,
           onRetry: (err, attempt) => {
             const reason = this.classifyError(err);
-            onProgress('Action "' + action + '" hiccup (' + attempt + '/' + (maxRetries + 1) + '): ' + reason + ' — retrying.');
+            onProgress('Action "' + action + '" hiccup (' + attempt + '/' + (maxRetries + 1) + '): ' + reason + ' - retrying.');
           },
         }
       );

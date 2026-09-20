@@ -1,65 +1,67 @@
 # minecraft-bot
 
-A self-improving Minecraft bot (mineflayer) with a natural-language "brain"
-(Claude CLI), full live game context, retry/failsafe action execution,
-persistent self-improvement memory, and automatic server-version detection -
-built for cracked / offline-mode servers (auth: "offline").
-
 [![CI](https://github.com/achryrn/bewok-minecraft-bot/actions/workflows/ci.yml/badge.svg)](https://github.com/achryrn/bewok-minecraft-bot/actions/workflows/ci.yml)
 
-## Quick start (double-click)
+I am a self-improving Minecraft bot built with mineflayer. I join cracked and
+offline-mode servers, understand natural-language requests, and complete
+multi-step tasks on my own. My brain is a suite of cooperating agents: a
+planner decides what to do, an executor carries out every action with retry
+and failsafe handling, and a reflector learns from what goes wrong so I do
+better next time.
 
-1. Make sure Node.js LTS is installed: https://nodejs.org
-   (any recently-installed Node 18/20/22/24 works).
-2. Double-click start-bot.bat :
+## Launching me
 
-   - First run: installs dependencies automatically (a few minutes),
-   - then connects to the server in config.json and runs,
-   - logs every launch to logs\bot.log,
-   - if something fails, the window stays open and shows the error.
+Double-click start-bot.bat and I handle the rest:
 
-3. To stop the bot: press Ctrl+C in its window.
+1. Node.js is checked first (install the LTS from https://nodejs.org if needed).
+2. Dependencies install automatically on the first run (a few minutes).
+3. I connect to the server configured in config.json and say hello in chat.
+4. Every launch is logged to logs\bot.log. If anything fails, the window stays
+   open so you can read the error.
 
-Optional self-check: run "node index.js --smoke" (or launch.ps1 -Smoke) to
-validate the config and ping the server for its Minecraft version WITHOUT
-connecting.
+Press Ctrl+C in my window to stop me. To check my configuration and the
+server version without connecting, run: node index.js --smoke
 
-## Tests
+## Running the tests
 
-Double-click test.bat - it copies the project to a local folder (necessary
-because Jest cannot resolve mapped network drives like Z:) and runs the full
-unit suite (288 tests / 20 suites).
+Double-click test.bat. Jest cannot resolve mapped network drives such as Z:,
+so the runner copies the project to a local folder under %LOCALAPPDATA% and
+runs the unit suite there: 288 tests across 20 suites. The same suite runs in
+CI on Node 20, 22, and 24.
 
-## Talking to the bot in-game
+## Talking to me in-game
 
-- Plain chat with a trigger word:  bot mine 16 oak logs
-- Or casual language:  hey bot, build me a 7x7 cobblestone platform
-- Slash shortcuts: /help, /status, /inventory, /mine stone 8, /goto x y z,
+- Address me with a trigger word: bot mine 16 oak logs
+- Use natural language: hey bot, build me a 7x7 cobblestone platform
+- Slash commands: /help, /status, /inventory, /mine stone 8, /goto x y z,
   /build platform cobblestone 7, /follow Steve, /memory, /stop
-- Whispers (/msg <bot> ...) are always "direct" - no trigger word needed.
+- Whisper to me directly; whispers are always treated as a direct request.
 
-## Files & folders
+## Repository layout
 
-| Path            | Purpose                                     |
-|-----------------|---------------------------------------------|
-| start-bot.bat   | double-click launcher                       |
-| test.bat        | double-click test runner                    |
-| config.json     | server, auth, brain, memory, retry settings |
-| data/           | runtime state (memory.json, task-state.json)|
-| logs/           | launch logs (bot.log)                       |
-| src/            | bot code (brain, agents, ui, managers)      |
-| production/     | synced deploy copy (identical layout)       |
+| Path            | Purpose                                      |
+|-----------------|----------------------------------------------|
+| start-bot.bat   | double-click launcher                        |
+| test.bat        | double-click test runner                     |
+| config.json     | server, auth, brain, memory, retry settings  |
+| data/           | runtime state (memory.json, task-state.json) |
+| logs/           | launch logs (bot.log)                        |
+| src/            | bot code (brain, agents, ui, managers)       |
+| forge-mod/      | source of the bridge mod (compiled botbridge-1.0.0.jar) |
+| production/     | synced deploy copy (identical layout)        |
 
-## Config highlights
+## Configuration
 
-- auth: "offline" - cracked/offline-mode servers (no premium account needed).
-- versionAutoDetect: true - pings the server and connects with ITS version
-  (flexible version hopping); falls back to "version" on ping failure.
-- brain.provider: "claude" - uses the Claude Code CLI installed on this PC
-  (claudePath). Keep a recent CLI version installed for the smartest behavior.
-- memory.enabled: true - the bot learns from failures and remembers places;
+- auth: "offline" lets me join cracked and offline-mode servers; no premium
+  account is required.
+- versionAutoDetect: true makes me ping the server and connect with its
+  version, falling back to the "version" value in config.json when the ping
+  fails.
+- brain.provider: "claude" uses the Claude Code CLI installed on this machine
+  (claudePath). Keep the CLI up to date for the best results.
+- memory.enabled: true lets me learn from failures and remember places; my
   lessons are stored in data/memory.json.
 
-Need a different server? Edit host / port / username in config.json and
-double-click start-bot.bat again.
-<!-- last-verified: 2026-09-20 02:58 UTC -->
+To point me at another server, edit host, port, and username in config.json,
+then double-click start-bot.bat again.
+<!-- last-verified: 2026-09-20 02:59 UTC -->

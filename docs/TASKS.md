@@ -1,4 +1,4 @@
-# TASKS.md — Ordered Work Plan
+# TASKS.md - Ordered Work Plan
 
 Do not reorder. Each task depends on the one before it. Per CLAUDE.md rule 7, update ISSUES.md after each fix.
 
@@ -26,14 +26,14 @@ Do not reorder. Each task depends on the one before it. Per CLAUDE.md rule 7, up
 **Files:** `src/movement.js`, `tests/unit/movement.test.js`
 
 **What:**
-- Delete `src/movement.js` — nothing imports it
+- Delete `src/movement.js` - nothing imports it
 - Delete or update `tests/unit/movement.test.js` (keep test file if we want to preserve patterns, but module is dead)
 
 **Resolves:** I2
 
 ---
 
-### T3: Refactor brain.js — accept nav, use wired managers
+### T3: Refactor brain.js - accept nav, use wired managers
 
 **Files:** `src/brain.js`
 
@@ -97,13 +97,13 @@ Iterate until all pass.
 
 ---
 
-### T9: Build botbridge mod and create JS channel handler (NEW — 2026-07-01)
+### T9: Build botbridge mod and create JS channel handler (NEW - 2026-07-01)
 
 **Files:** `forge-mod/src/main/java/`, `src/botbridge.js`, `src/bot.js`, `src/brain.js`
 
 **What:**
 - Build forge mod jar from Java sources via ForgeGradle (Java 17)
-- Create `src/botbridge.js` — JS-side `BotBridgeChannel` class for `botbridge:main` custom channel packets
+- Create `src/botbridge.js` - JS-side `BotBridgeChannel` class for `botbridge:main` custom channel packets
 - Wire channel in `bot.js._createBot()` as `this.bot.botbridge`
 - Update `_actionFindOre` in brain.js to try server-side scan through botbridge first, fall back to client-side chunk scan
 
@@ -115,12 +115,12 @@ Iterate until all pass.
 **Files:** src/llm.js, src/memory.js, src/context.js, src/planner.js, src/reflector.js, src/executor.js (all new)
 
 **What:**
-- src/llm.js — plumbable LLM client (claude CLI Windows path preserved) with envelope unwrap, JSON extraction, bounded retries, hard timeout.
-- src/memory.js — persistent JSON memory: facts, deduped lessons, locations, bounded chat history, stats.
-- src/context.js — FULL live context (vitals/pos/biome/time/weather/dimension/inventory/equipment/XP/effects/entities/blocks/task/memory) + first-person narrative.
-- src/planner.js — planner agent: persona system prompt + context + memory + history → {reply, plan[], remember[]}; legacy {action,args} accepted.
-- src/reflector.js — rule-based self-improvement: deaths, failures, stuck, ore finds → lessons + locations.
-- src/executor.js — withRetry / withTimeout / classifyError / dispatch for every action.
+- src/llm.js - plumbable LLM client (claude CLI Windows path preserved) with envelope unwrap, JSON extraction, bounded retries, hard timeout.
+- src/memory.js - persistent JSON memory: facts, deduped lessons, locations, bounded chat history, stats.
+- src/context.js - FULL live context (vitals/pos/biome/time/weather/dimension/inventory/equipment/XP/effects/entities/blocks/task/memory) + first-person narrative.
+- src/planner.js - planner agent: persona system prompt + context + memory + history -> {reply, plan[], remember[]}; legacy {action,args} accepted.
+- src/reflector.js - rule-based self-improvement: deaths, failures, stuck, ore finds -> lessons + locations.
+- src/executor.js - withRetry / withTimeout / classifyError / dispatch for every action.
 
 **Resolves:** I13, I15
 
@@ -130,7 +130,7 @@ Iterate until all pass.
 
 **What:**
 - Plumb memory/llm/planner/reflector/executor into the Brain.
-- handleChat: intent → full context → planner → memory write-back → reply → step-by-step plan execution with retries/failsafe.
+- handleChat: intent -> full context -> planner -> memory write-back -> reply -> step-by-step plan execution with retries/failsafe.
 - Instant stop-word and status shortcuts (no model round-trip).
 - Whispers supported via handleChat(..., {direct:true}).
 - Keep legacy spawnClaudeQuery / executeCommand / _buildBotState / _stripMarkdown API for compat.
@@ -143,7 +143,7 @@ Iterate until all pass.
 **Files:** src/chat.js, src/commands.js, src/bot.js
 
 **What:**
-- src/chat.js = single ChatManager UI: slash → external CommandHandler, NL → Brain, whispers = direct NL, line-safe replies, welcome message; keeps register/unregister/handleCommand/say/whisper + message/whisper events.
+- src/chat.js = single ChatManager UI: slash -> external CommandHandler, NL -> Brain, whispers = direct NL, line-safe replies, welcome message; keeps register/unregister/handleCommand/say/whisper + message/whisper events.
 - src/commands.js = aliases, single-line grouped help, per-command usage, /memory and /about; keeps /help first line starting with "Commands:".
 - src/bot.js = wire UI (hub for all chat), version detection in start(), bot._forgeHandler / _fabricHandler aliases, debug-gated packet logs, welcome on spawn.
 
@@ -192,3 +192,12 @@ Iterate until all pass.
 - test.bat runs the suite from a self-bootstrapping local copy at %LOCALAPPDATA%\minecraft-bot-tests (Jest cannot resolve mapped drives like Z:).
 - README.md documents the double-click quickstart; .gitignore excludes node_modules/data/logs/coverage.
 - Regenerable root coverage/ artifact removed.
+### T18: ASCII-only text + professional first-person rewording (DONE 2026-09-20)
+
+**What:**
+- All source, docs, and config converted to plain ASCII: no em/en dashes, no
+  arrows, no box-drawing characters.
+- Bot voice reworded to professional first person: welcome message, offline
+  fallback reply, and a 'professional tone / ASCII only / no emojis' rule
+  added to the planner system prompt.
+- README.md rewritten in first person from the bot's perspective.

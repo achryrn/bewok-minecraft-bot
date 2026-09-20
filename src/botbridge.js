@@ -1,17 +1,17 @@
 const EventEmitter = require('events');
 
 /**
- * BotBridgeChannel — JS-side handler for the botbridge Forge mod's custom channel.
+ * BotBridgeChannel - JS-side handler for the botbridge Forge mod's custom channel.
  *
  * Communicates with the server-side botbridge mod on FML channel `botbridge:main`.
  * Uses the Forge SimpleChannel wire format:
  *   - [varInt packetId][packet-specific data]
- *   - ID 0: OreScanRequest  (client → server)
- *   - ID 1: OreScanResponse (server → client)
+ *   - ID 0: OreScanRequest  (client -> server)
+ *   - ID 1: OreScanResponse (server -> client)
  *
  * Wire format for each packet:
  *   OreScanRequest:  [varInt 0][utf8 oreId][int x][int y][int z][varInt radius]
- *   OreScanResponse: [varInt 1][varInt count][(int x, int y, int z) × count]
+ *   OreScanResponse: [varInt 1][varInt count][(int x, int y, int z) x count]
  *
  * utf8 is FriendlyByteBuf.writeUtf: varInt length prefix + UTF-8 bytes.
  * int is 32-bit signed big-endian.
@@ -29,7 +29,7 @@ class BotBridgeChannel extends EventEmitter {
   _setup() {
     const client = this.bot._client;
     if (!client) {
-      console.log('[botbridge] No client available — deferring setup');
+      console.log('[botbridge] No client available - deferring setup');
       return;
     }
 
@@ -94,7 +94,7 @@ class BotBridgeChannel extends EventEmitter {
     });
   }
 
-  /* ───── Packet handling ───── */
+  /* ----- Packet handling ----- */
 
   _handlePacket(rawBuf) {
     const buf = Buffer.isBuffer(rawBuf) ? rawBuf : Buffer.from(rawBuf);
@@ -141,7 +141,7 @@ class BotBridgeChannel extends EventEmitter {
     return positions;
   }
 
-  /* ───── Encoding ───── */
+  /* ----- Encoding ----- */
 
   _encodeRequest(oreId, centerX, centerY, centerZ, radius) {
     // Packet ID 0 (varInt) + utf8 string + 3 ints + varInt radius
@@ -165,7 +165,7 @@ class BotBridgeChannel extends EventEmitter {
     return buf;
   }
 
-  /* ───── VarInt helpers ───── */
+  /* ----- VarInt helpers ----- */
 
   _readVarInt(buf, offset) {
     let value = 0;

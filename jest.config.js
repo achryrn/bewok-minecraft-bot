@@ -1,7 +1,7 @@
 const RUN_INTEGRATION = process.env.RUN_INTEGRATION === '1';
 
 module.exports = {
-  rootDir: __dirname, // explicit — avoids mapped/UNC drive rootDir detection bugs
+  rootDir: __dirname, // explicit - avoids mapped/UNC drive rootDir detection bugs
   testEnvironment: 'node',
   clearMocks: true,
   collectCoverage: true,

@@ -16,7 +16,7 @@ class BuildController {
 
   /**
    * Pure: compute block positions for a shape.
-   * No bot dependency — testable in isolation.
+   * No bot dependency - testable in isolation.
    *
    * @param {object} args - shape arguments { shape, width, length, height, hollow }
    * @param {{ x: number, y: number, z: number }} origin - resolved origin coordinates
@@ -60,7 +60,7 @@ class BuildController {
       }
 
       case 'cube': {
-        // Box centered on origin. Hollow by default — only surface blocks.
+        // Box centered on origin. Hollow by default - only surface blocks.
         const startX = ox - Math.floor((width - 1) / 2);
         const startY = oy - Math.floor((height - 1) / 2);
         const startZ = oz - Math.floor((length - 1) / 2);
@@ -112,7 +112,7 @@ class BuildController {
 
     const origin = this._resolveOrigin(args.origin);
     if (!origin) {
-      const msg = 'Could not resolve origin — bot not spawned?';
+      const msg = 'Could not resolve origin - bot not spawned?';
       console.log(`[build] ${msg}`);
       return { placed: 0, skipped: 0, failureReason: msg };
     }
@@ -131,12 +131,12 @@ class BuildController {
       return { placed: 0, skipped: 0, failureReason: null };
     }
 
-    console.log(`[build] Starting build — shape: ${args.shape}, material: ${material}, positions: ${positions.length}`);
+    console.log(`[build] Starting build - shape: ${args.shape}, material: ${material}, positions: ${positions.length}`);
 
     const availableCount = this.inventory ? this.inventory.count(material) : 0;
     if (availableCount < positions.length) {
       const needMore = positions.length - availableCount;
-      const msg = `Need ${material} — have ${availableCount}, need ${needMore} more`;
+      const msg = `Need ${material} - have ${availableCount}, need ${needMore} more`;
       console.log(`[build] ${msg}`);
       return { placed: 0, skipped: 0, failureReason: msg };
     }
@@ -151,7 +151,7 @@ class BuildController {
     for (const posP of ordered) {
       if (shouldContinue && typeof shouldContinue === 'function' && !shouldContinue()) {
         failureReason = 'cancelled';
-        console.log(`[build] Build cancelled — placed ${placed}/${positions.length}`);
+        console.log(`[build] Build cancelled - placed ${placed}/${positions.length}`);
         break;
       }
 
@@ -159,17 +159,17 @@ class BuildController {
       try {
         const existing = this.bot.blockAt(new Vec3(posP.x, posP.y, posP.z));
         if (existing && existing.type !== 0 && existing.type !== -1) {
-          console.log(`[build] Position (${posP.x},${posP.y},${posP.z}) already occupied — skipping`);
+          console.log(`[build] Position (${posP.x},${posP.y},${posP.z}) already occupied - skipping`);
           continue;
         }
       } catch (e) {
-        // blockAt failed (unloaded chunk, etc.) — try to place anyway
+        // blockAt failed (unloaded chunk, etc.) - try to place anyway
       }
 
       // Navigate within reach of the target
       const moved = await this._moveNearTarget(posP);
       if (!moved) {
-        console.log(`[build] Cannot reach (${posP.x},${posP.y},${posP.z}) — skipping`);
+        console.log(`[build] Cannot reach (${posP.x},${posP.y},${posP.z}) - skipping`);
         skipped++;
         continue;
       }
@@ -187,7 +187,7 @@ class BuildController {
       // Find an existing block adjacent to the target to place against
       const refInfo = this._findReferenceBlock(posP);
       if (!refInfo) {
-        console.log(`[build] No reference block adjacent to (${posP.x},${posP.y},${posP.z}) — skipping`);
+        console.log(`[build] No reference block adjacent to (${posP.x},${posP.y},${posP.z}) - skipping`);
         skipped++;
         continue;
       }
@@ -198,13 +198,13 @@ class BuildController {
         placed++;
         console.log(`[build] Placed ${material} at (${posP.x},${posP.y},${posP.z})`);
       } else {
-        console.log(`[build] Failed to place ${material} at (${posP.x},${posP.y},${posP.z}) — skipping`);
+        console.log(`[build] Failed to place ${material} at (${posP.x},${posP.y},${posP.z}) - skipping`);
         skipped++;
       }
     }
 
     const result = { placed, skipped, failureReason };
-    console.log(`[build] Build complete — placed: ${placed}/${positions.length}, skipped: ${skipped}, failure: ${failureReason || 'none'}`);
+    console.log(`[build] Build complete - placed: ${placed}/${positions.length}, skipped: ${skipped}, failure: ${failureReason || 'none'}`);
     return result;
   }
 
@@ -222,7 +222,7 @@ class BuildController {
       await this.bot.placeBlock(refInfo.referenceBlock, refInfo.faceVector);
       return true;
     } catch (err) {
-      console.log(`[build] First placement failed at (${posP.x},${posP.y},${posP.z}): ${err.message} — retrying`);
+      console.log(`[build] First placement failed at (${posP.x},${posP.y},${posP.z}): ${err.message} - retrying`);
       // Try a different reference block if available
       const altRef = this._findReferenceBlock(posP, refInfo.referenceBlock.position);
       if (altRef) {
@@ -242,8 +242,8 @@ class BuildController {
 
   /**
    * Resolve the origin argument to { x, y, z }.
-   * "bot" (or null/undefined) → use bot's current position, floored.
-   * { x, y, z } object → use directly, floored.
+   * "bot" (or null/undefined) -> use bot's current position, floored.
+   * { x, y, z } object -> use directly, floored.
    *
    * @param {string|object|null} originArg
    * @returns {{ x: number, y: number, z: number }|null}
@@ -274,12 +274,12 @@ class BuildController {
    */
   _findReferenceBlock(pos, excludePos) {
     const offsets = [
-      { d: { x: 0, y: -1, z: 0 }, dir: { x: 0, y: 1, z: 0 } },   // below → place up
-      { d: { x: 0, y: 1, z: 0 }, dir: { x: 0, y: -1, z: 0 } },   // above → place down
-      { d: { x: -1, y: 0, z: 0 }, dir: { x: 1, y: 0, z: 0 } },   // west  → place east
-      { d: { x: 1, y: 0, z: 0 }, dir: { x: -1, y: 0, z: 0 } },   // east  → place west
-      { d: { x: 0, y: 0, z: -1 }, dir: { x: 0, y: 0, z: 1 } },   // north → place south
-      { d: { x: 0, y: 0, z: 1 }, dir: { x: 0, y: 0, z: -1 } },   // south → place north
+      { d: { x: 0, y: -1, z: 0 }, dir: { x: 0, y: 1, z: 0 } },   // below -> place up
+      { d: { x: 0, y: 1, z: 0 }, dir: { x: 0, y: -1, z: 0 } },   // above -> place down
+      { d: { x: -1, y: 0, z: 0 }, dir: { x: 1, y: 0, z: 0 } },   // west  -> place east
+      { d: { x: 1, y: 0, z: 0 }, dir: { x: -1, y: 0, z: 0 } },   // east  -> place west
+      { d: { x: 0, y: 0, z: -1 }, dir: { x: 0, y: 0, z: 1 } },   // north -> place south
+      { d: { x: 0, y: 0, z: 1 }, dir: { x: 0, y: 0, z: -1 } },   // south -> place north
     ];
 
     for (const offset of offsets) {
@@ -296,7 +296,7 @@ class BuildController {
           };
         }
       } catch (_) {
-        // block not loaded or error — try next face
+        // block not loaded or error - try next face
       }
     }
 

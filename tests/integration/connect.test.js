@@ -71,7 +71,7 @@ describe('Bot Integration', () => {
 
         if (output.includes('kicked')) {
           console.log('FAIL: Bot was kicked from server');
-          // This is informative even in failure — capture the reason
+          // This is informative even in failure - capture the reason
         }
 
         if (output.includes('FML') && output.includes('handshake')) {

@@ -1,14 +1,14 @@
 'use strict';
 /**
- * brain.js — the multi-agent orchestrator.
+ * brain.js - the multi-agent orchestrator.
  *
  * One bot, several cooperating agents (all in the same process):
  *
- *   1. PLANNER  (src/planner.js) — reads the FULL live game context + memory
+ *   1. PLANNER  (src/planner.js) - reads the FULL live game context + memory
  *      and decides what to SAY and DO (ordered plan of actions).
- *   2. EXECUTOR (src/executor.js) — runs each plan step with retries, timeouts
+ *   2. EXECUTOR (src/executor.js) - runs each plan step with retries, timeouts
  *      and failure classification, keeping the player updated (interactive).
- *   3. REFLECTOR(src/reflector.js) — watches outcomes (failures, deaths,
+ *   3. REFLECTOR(src/reflector.js) - watches outcomes (failures, deaths,
  *      discoveries) and writes durable lessons into memory so the bot
  *      self-improves over time.
  *
@@ -22,7 +22,7 @@
  *   - interactive: progress updates + clear failure messages in chat,
  *   - full context: context.buildFullContext feeds the planner every query,
  *   - long tasks: task manager persists + resumes across reconnects,
- *   - self improving: reflector → memory → planner on every loop.
+ *   - self improving: reflector -> memory -> planner on every loop.
  */
 
 const { TaskManager } = require('./task');
@@ -35,7 +35,7 @@ const { ActionExecutor } = require('./executor');
 const { buildFullContext } = require('./context');
 
 const SYSTEM_PROMPT = [
-  'You are a Minecraft bot. Bot state below has an "inventory" field — this is the bot\'s actual inventory from the server. When asked about inventory, look at the bot state and report what you see there. Do not guess or assume items not listed.',
+  'You are a Minecraft bot. Bot state below has an "inventory" field - this is the bot\'s actual inventory from the server. When asked about inventory, look at the bot state and report what you see there. Do not guess or assume items not listed.',
   'Reply with JSON only. No extra text.',
   'Available actions: chat, move, mine, gather, follow, stop, attack, craft, drop, come, status, findore, explore, build, chain, equip, cycle.',
   'If unsure: {"action":"chat","args":{"message":"I did not understand that."}}',
@@ -62,7 +62,7 @@ class Brain {
 
     const memoryCfg = (config && config.memory) || {};
     this.memory = new BotMemory(memoryCfg.path || './data/memory.json', memoryCfg.maxLessons || 300);
-    this.memory.enabled = (memoryCfg.enabled === true); // off by default → no disk writes in unit tests
+    this.memory.enabled = (memoryCfg.enabled === true); // off by default -> no disk writes in unit tests
     if (config && config.debug && this.memory.enabled) console.log('[brain] Persistent memory enabled at ' + (memoryCfg.path || './data/memory.json'));
 
     this.reflector = new ReflectorAgent(bot, this.memory, config);
@@ -72,7 +72,7 @@ class Brain {
     this.taskManager.loadFromDisk();
   }
 
-  /* ───── Conversation ───── */
+  /* ----- Conversation ----- */
 
   /**
    * Handle an inbound player message.
@@ -93,7 +93,7 @@ class Brain {
     }
     if (!intent) return;
 
-    // Instant stop/clear handling — no model round trip (failsafe)
+    // Instant stop/clear handling - no model round trip (failsafe)
     const lowered = intent.toLowerCase();
     if (STOP_WORDS.some((w) => lowered.includes(w))) {
       this._actionStop();
@@ -102,7 +102,7 @@ class Brain {
       return;
     }
 
-    // Status shortcut — fast health/position report without the model
+    // Status shortcut - fast health/position report without the model
     if (/^(status|stats?|hp|health|where are you|pos)$/i.test(intent.trim())) {
       await this._actionStatus();
       this._recordExchange(username, intent, { action: 'status', args: {} });
@@ -128,7 +128,7 @@ class Brain {
         if (this.memory) this.memory.pushHistory('bot', 'brain offline; used local fallback');
         return;
       }
-      this.bot.chat('My brain is having a moment — try that again in a second.');
+      this.bot.chat('I cannot reach my brain interface right now. Please try again in a moment.');
       this._recordExchange(username, intent, { action: 'chat', args: { message: 'brain hiccup' } });
       return;
     }
@@ -160,7 +160,7 @@ class Brain {
   }
 
   /**
-   * Local deterministic intent parser — used when the planner/LLM is offline so
+   * Local deterministic intent parser - used when the planner/LLM is offline so
    * the bot can still handle the most common requests (failsafe behavior).
    */
   _fallbackIntent(intent, username) {
@@ -199,7 +199,7 @@ class Brain {
   }
 
   /**
-   * Loop-backed actions run asynchronously (setImmediate) — the plan must wait
+   * Loop-backed actions run asynchronously (setImmediate) - the plan must wait
    * for them to finish before moving to the next step so steps never overlap.
    */
   _waitForLoopEnd(timeoutMs) {
@@ -237,7 +237,7 @@ class Brain {
     });
     if (!outcome.ok) {
       const reason = outcome.error ? outcome.error.reason : 'unknown';
-      this._say('That did not work (' + reason + ') — ' + this._suggestionFor(reason, step.action));
+      this._say('That did not work (' + reason + ') - ' + this._suggestionFor(reason, step.action));
       if (this.reflector) this.reflector.observe({ type: 'task-fail', reason: reason, action: step.action });
       return;
     }
@@ -247,7 +247,7 @@ class Brain {
     if (LOOP_ACTIONS.includes(step.action)) {
       const completed = await this._waitForLoopEnd(180000);
       if (!completed) {
-        this._say('I stopped that mid-way (' + step.action + ') — taking too long.');
+        this._say('I stopped that mid-way (' + step.action + ') - taking too long.');
         if (this.reflector) this.reflector.observe({ type: 'task-fail', reason: 'timeout', action: step.action });
       }
     }
@@ -260,11 +260,11 @@ class Brain {
   _suggestionFor(reason, action) {
     switch (reason) {
       case 'no-path': return 'that place is not reachable from here.';
-      case 'no-block': return 'I could not find any nearby — point me somewhere?';
-      case 'inventory-full': return 'my inventory is full — clear some space first.';
+      case 'no-block': return 'I could not find any nearby - point me somewhere?';
+      case 'inventory-full': return 'my inventory is full - clear some space first.';
       case 'missing-item': return 'I do not have what I need for that.';
-      case 'danger-lava': return 'lava is involved — not touching that.';
-      case 'dead': return 'I died — give me a moment to respawn.';
+      case 'danger-lava': return 'lava is involved - not touching that.';
+      case 'dead': return 'I died - give me a moment to respawn.';
       case 'brain-offline': return 'my brain process is unavailable right now.';
       case 'timeout': return 'that took too long, so I stopped.';
       default: return 'I will try a different way next time.';
@@ -284,7 +284,7 @@ class Brain {
     return null;
   }
 
-  /* ───── State & context ───── */
+  /* ----- State & context ----- */
 
   /** Full live context for the planner (context.js). */
   _buildFullContext() {
@@ -353,7 +353,7 @@ class Brain {
   _buildTaskContext() {
     const t = this.taskManager.currentTask;
     if (!t) return 'No active task.';
-    return 'Active task: ' + t.type + ' ' + JSON.stringify(t.args) + ' — status: ' + t.status + ' — progress: ' + JSON.stringify(t.progress);
+    return 'Active task: ' + t.type + ' ' + JSON.stringify(t.args) + ' - status: ' + t.status + ' - progress: ' + JSON.stringify(t.progress);
   }
 
   _getNearbyMobs() {
@@ -466,7 +466,7 @@ class Brain {
     if (line.trim()) this.bot.chat(line.trim());
   }
 
-  /* ───── Legacy LLM query path (kept for compat/tests) ───── */
+  /* ----- Legacy LLM query path (kept for compat/tests) ----- */
 
   async spawnClaudeQuery(playerName, intent, botState, history, taskContext) {
     const ctx = {
@@ -504,7 +504,7 @@ class Brain {
     }
   }
 
-  /* ───── Death/Respawn ───── */
+  /* ----- Death/Respawn ----- */
 
   onDeath() {
     console.log('[bot] Bot died');
@@ -550,7 +550,7 @@ class Brain {
     }
   }
 
-  /* ───── Dispatch ───── */
+  /* ----- Dispatch ----- */
 
   _actionFor(action) {
     const map = {
@@ -600,7 +600,7 @@ class Brain {
     }
   }
 
-  /* ───── Actions ───── */
+  /* ----- Actions ----- */
 
   _actionChat(args) {
     if (args && args.message) this.bot.chat(args.message);
@@ -648,7 +648,7 @@ class Brain {
       while (this.loopRunning && mined < count) {
         try {
           if (this.bot.inventory.emptySlotCount && this.bot.inventory.emptySlotCount() === 0) {
-            this.bot.chat('Inventory full — mined ' + mined + '/' + count + ' ' + blockName + '. Need space.');
+            this.bot.chat('Inventory full - mined ' + mined + '/' + count + ' ' + blockName + '. Need space.');
             if (this.reflector) this.reflector.observe({ type: 'inventory-full' });
             this.taskManager.pauseTask('inventory_full');
             if (this.taskManager.currentTask) {
@@ -660,7 +660,7 @@ class Brain {
             }
             if (this.loopRunning) {
               this.taskManager.resumeTask();
-              this.bot.chat('Space freed — continuing...');
+              this.bot.chat('Space freed - continuing...');
             }
           }
 
@@ -697,7 +697,7 @@ class Brain {
           this.bot.chat('Mined ' + count + ' ' + blockName + '.');
           if (this.reflector) this.reflector.observe({ type: 'task-complete', task: this.taskManager.currentTask });
         } else if (mined > 0) {
-          const reason = 'Mined ' + mined + '/' + count + ' ' + blockName + ' — no more found';
+          const reason = 'Mined ' + mined + '/' + count + ' ' + blockName + ' - no more found';
           this.taskManager.failTask(reason);
           if (this.reflector) this.reflector.observe({ type: 'task-fail', reason: reason, action: 'mine' });
         }
@@ -904,7 +904,7 @@ class Brain {
           }
           return results;
         } catch (bbErr) {
-          console.log('[brain] BotBridge scan failed: ' + bbErr.message + ' — falling back to local scan');
+          console.log('[brain] BotBridge scan failed: ' + bbErr.message + ' - falling back to local scan');
         }
       }
 
@@ -1067,7 +1067,7 @@ class Brain {
     const runStep = async (index) => {
       if (!this.loopRunning) return;
       if (index >= args.steps.length) {
-        this.bot.chat('Chain complete — all steps finished.');
+        this.bot.chat('Chain complete - all steps finished.');
         this.taskManager.completeTask('All steps completed');
         this.loopRunning = false;
         this.currentLoop = null;
@@ -1104,13 +1104,13 @@ class Brain {
     setImmediate(() => runStep(currentStepIndex));
   }
 
-  /* ───── Memory-backed actions ───── */
+  /* ----- Memory-backed actions ----- */
 
   _actionRemember(args) {
     if (!args || !args.text) { this.bot.chat('Remember requires text.'); return; }
     if (!this.memory) { this.bot.chat('Memory is not available.'); return; }
     this.memory.learn(String(args.text), ['manual']);
-    this.bot.chat('Got it — remembered.');
+    this.bot.chat('Got it - remembered.');
   }
 
   async _actionRecall() {
@@ -1149,7 +1149,7 @@ class Brain {
     else this.bot.chat('Anyone out there?');
   }
 
-  /* ───── Loop control ───── */
+  /* ----- Loop control ----- */
 
   cancelCurrentLoop() {
     this._stopRequested = true;

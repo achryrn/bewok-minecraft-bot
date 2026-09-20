@@ -47,7 +47,7 @@ class BotManager {
   async start() {
     this.stopping = false;
     this._welcomed = false;
-    this._logBot('Starting — host: ' + this.config.host + ':' + this.config.port + '  username: ' + this.config.username);
+    this._logBot('Starting - host: ' + this.config.host + ':' + this.config.port + '  username: ' + this.config.username);
 
     // Flexible version hopping: ping the server and connect with ITS version.
     if (this.config.versionAutoDetect === true) {
@@ -57,7 +57,7 @@ class BotManager {
       this._versionInfo = detection;
       this._detectedVersion = resolved.version;
       this._logBot(
-        'Version resolution: ' + resolved.source + ' → ' + String(resolved.version) +
+        'Version resolution: ' + resolved.source + ' -> ' + String(resolved.version) +
         (detection.rawVersion ? '  (server reports: "' + detection.rawVersion + '")' : '') +
         (detection.error ? '  [ping ' + detection.error + ']' : '')
       );
@@ -135,7 +135,7 @@ class BotManager {
     this.botbridge = new BotBridgeChannel(this.bot);
     this.bot.botbridge = this.botbridge;
 
-    // ── UI layer: single interface for chat in/out ────────────────────────
+    // -- UI layer: single interface for chat in/out ------------------------
     this.ui = new ChatManager(this.bot, this.config);
     this.ui.useExternalCommands(this.commandHandler);
     this.ui.setNaturalHandler((username, message, opts) => {
@@ -192,18 +192,18 @@ class BotManager {
       if (this.forgeHandler && this.forgeHandler.handshakeComplete) {
         // forge mode
       } else if (this.fabricHandler && this.fabricHandler._setup) {
-        // fabric — detected via brand packet later
+        // fabric - detected via brand packet later
       } else {
         this._vanillaTimeout = setTimeout(() => {
           if (!this._serverModeLogged) return;
-          this._logBot('No Forge or Fabric channel detected — vanilla mode');
+          this._logBot('No Forge or Fabric channel detected - vanilla mode');
           this._detectedMode = 'vanilla';
           this.bot.emit('serverMode', 'vanilla');
         }, 5000);
       }
 
       const words = this.config.triggerWords || ['bot', 'hey bot', '!bot'];
-      this._logBrain('Ready — trigger words: ' + words.join(', '));
+      this._logBrain('Ready - trigger words: ' + words.join(', '));
 
       if (!this._welcomed && this.ui && this.config.ui && this.config.ui.welcome !== false) {
         this._welcomed = true;
@@ -271,9 +271,9 @@ class BotManager {
 
   _handleDisconnect() {
     if (this.stopping) return;
-    if (!this.config.reconnect) { console.error('[error] Reconnect disabled — exiting'); return; }
+    if (!this.config.reconnect) { console.error('[error] Reconnect disabled - exiting'); return; }
     if (this.reconnectAttempts >= this.config.maxReconnectAttempts) {
-      console.error('[error] Max reconnect attempts reached (' + this.reconnectAttempts + '/' + this.config.maxReconnectAttempts + ') — giving up');
+      console.error('[error] Max reconnect attempts reached (' + this.reconnectAttempts + '/' + this.config.maxReconnectAttempts + ') - giving up');
       console.error('[error] Run node index.js to restart');
       return;
     }

@@ -1,15 +1,15 @@
 'use strict';
 /**
- * versioning.js — flexible version hopping.
+ * versioning.js - flexible version hopping.
  *
  * Detects the Minecraft version a server is actually running (via server-list
  * ping) instead of relying on a hardcoded "version" in config.json. This makes
- * the bot able to hop between servers of different versions (1.8 – 1.21+),
+ * the bot able to hop between servers of different versions (1.8 - 1.21+),
  * which matters a lot on cracked/offline server networks that host wildly
  * different versions behind one IP.
  *
  * Detection pipeline:
- *   1. mc.ping the server (TCP handshake + status) → { version: {name, protocol}, ... }.
+ *   1. mc.ping the server (TCP handshake + status) -> { version: {name, protocol}, ... }.
  *   2. Extract the raw version string (handles "Requires MC 1.20.1" etc.).
  *   3. Normalize against minecraft-data's supported versions.
  *   4. Fall back to the configured version when the ping is unavailable,
@@ -18,10 +18,10 @@
 
 const mc = require('minecraft-protocol');
 
-/** Version strings we treat as "unknown / auto" — pass through to detection. */
+/** Version strings we treat as "unknown / auto" - pass through to detection. */
 const FALSY_VERSIONS = new Set(['', 'auto', 'detect', 'latest', 'false', '?']);
 
-/** Disambiguation for common ambiguous server strings (x.y → last x.y.z). */
+/** Disambiguation for common ambiguous server strings (x.y -> last x.y.z). */
 const ALIAS_MAP = {
   '1.20': '1.20.1',
   '1.20.0': '1.20.1',
@@ -101,7 +101,7 @@ function closestSupportedVersion(version, supportedVersions) {
   if (!versions || versions.length === 0) return version || null;
   if (versions.includes(version)) return version;
 
-  // Try major-version floor: e.g. 1.20.2 → highest supported 1.20.x
+  // Try major-version floor: e.g. 1.20.2 -> highest supported 1.20.x
   const major = version.split('.').slice(0, 2).join('.');
   const sameMajor = versions.filter(v => v.startsWith(major + '.') || v === major);
   if (sameMajor.length > 0) {
@@ -167,7 +167,7 @@ function detectServerVersion(host, port, timeoutMs = 6000) {
  *   1. explicit configured version when versionAutoDetect is disabled,
  *   2. detected version clamped to a supported one,
  *   3. configured version as fallback,
- *   4. false → let mineflayer resolve (recommended only when sure).
+ *   4. false -> let mineflayer resolve (recommended only when sure).
  *
  * @param {object} config
  * @param {object} detection - output of detectServerVersion()

@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 /**
- * ConfigManager — runtime configuration with disk persistence.
+ * ConfigManager - runtime configuration with disk persistence.
  * Supports in-game slash commands to modify bot settings.
  */
 

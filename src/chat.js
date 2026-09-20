@@ -1,18 +1,18 @@
 'use strict';
 /**
- * chat.js — the bot's UI layer.
+ * chat.js - the bot's UI layer.
  *
  * This is the single place where inbound player messages arrive and where every
  * outbound reply is formatted. It is "the UI" in the sense that matters for a
  * Minecraft bot: how players talk to it, how slash shortcuts work, and how the
- * bot speaks back — natural, readable, first-person, never wall-of-text.
+ * bot speaks back - natural, readable, first-person, never wall-of-text.
  *
  * Responsibilities:
  *   1. Route input:
- *        - "/cmd ..."  → slash command registry (fast, deterministic shortcuts)
- *        - anything else → the natural-language handler (the Brain), connected
- *          via setNaturalHandler() — so NL conversation is the primary UI.
- *        - whispers  → NL handler in "direct" mode (no trigger word needed).
+ *        - "/cmd ..."  -> slash command registry (fast, deterministic shortcuts)
+ *        - anything else -> the natural-language handler (the Brain), connected
+ *          via setNaturalHandler() - so NL conversation is the primary UI.
+ *        - whispers  -> NL handler in "direct" mode (no trigger word needed).
  *   2. Format output:
  *        - replies are split at readable line lengths (servers drop long lines),
  *        - a welcome/help message is provided on spawn,
@@ -41,7 +41,7 @@ class ChatManager extends EventEmitter {
     this.externalHandler = handler || null;
   }
 
-  /* ───── Input hooks ───── */
+  /* ----- Input hooks ----- */
 
   /** Connect the brain as the natural-language processor. */
   setNaturalHandler(fn) {
@@ -78,7 +78,7 @@ class ChatManager extends EventEmitter {
     }
   }
 
-  /** Handle a whisper (private message) — routed as "direct" NL. */
+  /** Handle a whisper (private message) - routed as "direct" NL. */
   handleWhisper(username, message) {
     if (username === this.bot.username) return;
     this.emit('whisper', { username, message });
@@ -99,7 +99,7 @@ class ChatManager extends EventEmitter {
     });
   }
 
-  /* ───── Slash commands (shortcut UI) ───── */
+  /* ----- Slash commands (shortcut UI) ----- */
 
   _registerDefaultCommands() {
     this.register('help', async (username, args) => {
@@ -163,7 +163,7 @@ class ChatManager extends EventEmitter {
     }
   }
 
-  /* ───── Output formatting ───── */
+  /* ----- Output formatting ----- */
 
   /**
    * Reply with safe line splitting (a single line can be silently truncated or
@@ -206,7 +206,7 @@ class ChatManager extends EventEmitter {
   /** Welcome message shown shortly after spawn. */
   sendWelcome(triggerWords) {
     const triggers = (triggerWords && triggerWords.length ? triggerWords : ['bot']).join('", "');
-    this.reply('Heya! I am online. Say "' + triggers + '" + your request and I will get it done — or use /help for quick commands.');
+    this.reply('I am online and ready to help. Say "' + triggers + '" followed by your request, or use /help for the command list.');
   }
 
   sendHelp() {

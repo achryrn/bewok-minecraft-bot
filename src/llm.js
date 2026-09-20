@@ -1,6 +1,6 @@
 'use strict';
 /**
- * llm.js — pluggable LLM client used by every agent in the bot.
+ * llm.js - pluggable LLM client used by every agent in the bot.
  *
  * Currently supports the Claude Code CLI (the deployment's canonical brain),
  * spawned per query via cmd.exe (Windows deployment). Every other agent
@@ -74,12 +74,12 @@ ${instruction}`;
     });
   }
 
-  /* ───── Model runners ───── */
+  /* ----- Model runners ----- */
 
   async _runModel(prompt) {
     if (this.provider === 'claude') return this._runClaude(prompt);
     if (this.provider === 'debug') return this._runDebug(prompt);
-    // Unknown provider — fall back to claude CLI rather than failing hard
+    // Unknown provider - fall back to claude CLI rather than failing hard
     return this._runClaude(prompt);
   }
 
@@ -148,7 +148,7 @@ ${instruction}`;
           }
           return parsed.result;
         }
-        // Already a plain action/envelope object — serialize back so callers see JSON text
+        // Already a plain action/envelope object - serialize back so callers see JSON text
         if (parsed.action || parsed.plan || parsed.reply !== undefined) {
           return output;
         }
@@ -156,7 +156,7 @@ ${instruction}`;
       return output;
     } catch (err) {
       if (err.message && err.message.startsWith('LLM reported error')) throw err;
-      // Not JSON — treat as plain model text
+      // Not JSON - treat as plain model text
       return output;
     }
   }
@@ -166,7 +166,7 @@ ${instruction}`;
     return Promise.resolve('{"action":"chat","args":{"message":"Debug mode thinking."}}');
   }
 
-  /* ───── Retry / extraction ───── */
+  /* ----- Retry / extraction ----- */
 
   async _withRetry(runFn, { label, validate, transform }) {
     let lastErr = null;

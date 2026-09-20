@@ -1,6 +1,6 @@
 'use strict';
 /**
- * commands.js — slash-command UI (fast, deterministic shortcuts).
+ * commands.js - slash-command UI (fast, deterministic shortcuts).
  *
  * Plain-language chat is the primary interface (routed to the Brain via
  * ChatManager); these "/" commands are the power-user shortcuts on top of it.
@@ -65,7 +65,7 @@ class CommandHandler {
   }
 
   _registerDefaultCommands() {
-    /* ── Movement & actions ── */
+    /* -- Movement & actions -- */
 
     this.register('follow', (sender, args) => {
       const target = args.join(' ');
@@ -159,7 +159,7 @@ class CommandHandler {
       }
     }, 'build <shape> <material> <width> [length] [height]');
 
-    /* ── Items & self ── */
+    /* -- Items & self -- */
 
     this.register('inventory', (sender, args) => {
       const items = this.bot.inventory.items();
@@ -223,19 +223,19 @@ class CommandHandler {
       else this.bot.chat('Brain not available for cycling');
     }, 'cycle');
 
-    /* ── Knowledge & config ── */
+    /* -- Knowledge & config -- */
 
     this.register('help', (sender, args) => {
       const target = (args[0] || '').toLowerCase();
       if (target && this.commands.has(target)) {
         const use = this.usages.get(target) || target;
-        this._reply('/' + target + (use !== target ? ' — ' + use : ''));
+        this._reply('/' + target + (use !== target ? ' - ' + use : ''));
         return;
       }
       if (target && ALIASES[target]) {
         const canonical = ALIASES[target];
         const use = this.usages.get(canonical) || canonical;
-        this._reply('/' + target + ' is an alias for /' + canonical + (use !== canonical ? ' — ' + use : ''));
+        this._reply('/' + target + ' is an alias for /' + canonical + (use !== canonical ? ' - ' + use : ''));
         return;
       }
       // Single-line command list (servers drop long messages; keep it short).
@@ -251,7 +251,7 @@ class CommandHandler {
     }, 'memory');
 
     this.register('about', (sender, args) => {
-      this.bot.chat('I am a self-improving Minecraft bot — ask me anything in plain language. (/help for shortcuts)');
+      this.bot.chat('I am a self-improving Minecraft bot - ask me anything in plain language. (/help for shortcuts)');
     }, 'about');
 
     this.register('config', (sender, args) => {
@@ -297,7 +297,7 @@ class CommandHandler {
         }
         case 'reset': {
           this.configManager.reset();
-          this.bot.chat('Runtime overrides reset — using file config values');
+          this.bot.chat('Runtime overrides reset - using file config values');
           break;
         }
         default:
@@ -315,9 +315,9 @@ class CommandHandler {
         if (status.failCount > 0) parts.push('Failures: ' + status.failCount);
         this.bot.chat(parts.join(' | '));
       } else if (this.bot._fabricHandler) {
-        this.bot.chat('Fabric detected — no handshake needed');
+        this.bot.chat('Fabric detected - no handshake needed');
       } else {
-        this.bot.chat('Vanilla mode — no Forge or Fabric detected');
+        this.bot.chat('Vanilla mode - no Forge or Fabric detected');
       }
     }, 'handshake');
   }
@@ -333,7 +333,7 @@ class CommandHandler {
     if (usage) this.usages.set(name.toLowerCase(), usage);
   }
 
-  /** Resolve alias → canonical command name. */
+  /** Resolve alias -> canonical command name. */
   resolve(name) {
     const lower = name.toLowerCase();
     if (this.commands.has(lower)) return lower;

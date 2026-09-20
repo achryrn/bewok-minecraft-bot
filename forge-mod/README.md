@@ -1,12 +1,12 @@
-# BotBridge — Companion Forge Server Mod
+# BotBridge - Companion Forge Server Mod
 
 A Forge 1.20.1 mod that enables a JavaScript mineflayer bot to connect to modded servers.
 
 ## What It Does
 
-1. **Whitelist bypass** — Lets the bot join even when mods have `required: true` network channels
-2. **Ore scanning** — Server-side chunk scan for ore positions (bot requests, server scans ALL loaded chunks)
-3. **Configuration** — `/botbridge whitelist list` command in-game
+1. **Whitelist bypass** - Lets the bot join even when mods have `required: true` network channels
+2. **Ore scanning** - Server-side chunk scan for ore positions (bot requests, server scans ALL loaded chunks)
+3. **Configuration** - `/botbridge whitelist list` command in-game
 
 ## Installation
 
@@ -54,21 +54,21 @@ Output: `build/libs/botbridge-1.0.0.jar`
 
 ```
 forge-mod/
-├── build.gradle
-├── src/main/java/com/bewok/botbridge/
-│   ├── BotBridgeMod.java          — Mod entry point
-│   ├── config/
-│   │   └── BotBridgeConfig.java   — Server config (whitelist, ore scan radius)
-│   ├── events/
-│   │   └── PlayerNegotiationHandler.java — Whitelist bypass
-│   ├── network/
-│   │   ├── NetworkHandler.java    — SimpleChannel registration
-│   │   └── packets/
-│   │       ├── OreScanRequestPacket.java  — Bot→Server ore scan request
-│   │       └── OreScanResponsePacket.java — Server→Bot scan results
-│   └── command/
-│       └── BotBridgeCommands.java — In-game command registration
-└── src/main/resources/
-    ├── META-INF/mods.toml
-    └── pack.mcmeta
++-- build.gradle
++-- src/main/java/com/bewok/botbridge/
+|   +-- BotBridgeMod.java          - Mod entry point
+|   +-- config/
+|   |   +-- BotBridgeConfig.java   - Server config (whitelist, ore scan radius)
+|   +-- events/
+|   |   +-- PlayerNegotiationHandler.java - Whitelist bypass
+|   +-- network/
+|   |   +-- NetworkHandler.java    - SimpleChannel registration
+|   |   +-- packets/
+|   |       +-- OreScanRequestPacket.java  - Bot->Server ore scan request
+|   |       +-- OreScanResponsePacket.java - Server->Bot scan results
+|   +-- command/
+|       +-- BotBridgeCommands.java - In-game command registration
++-- src/main/resources/
+    +-- META-INF/mods.toml
+    +-- pack.mcmeta
 ```

@@ -1,6 +1,6 @@
 'use strict';
 /**
- * planner.js — the "decides what to do" agent.
+ * planner.js - the "decides what to do" agent.
  *
  * The planner receives the bot's FULL live context (see context.js), its memory,
  * recent conversation and the player's natural-language request, and returns a
@@ -26,33 +26,33 @@ const KNOWN_ACTIONS = new Set([
 
 const ACTION_GUIDE = [
   'Available actions (use sparingly; one or few per plan):',
-  '- chat        {message} — say something in chat (the only way you speak)',
-  '- move        {x, y, z} — walk to a position',
-  '- mine        {block, count?} — dig N of a block (alias gather)',
-  '- follow      {player} — follow a player around',
-  '- stop        {} — halt everything',
-  '- attack      {target} — attack a mob/player by name (e.g. "zombie")',
-  '- craft       {item, count?} — craft an item you have ingredients for',
-  '- drop        {item, count?} — throw away items',
-  '- come        {player} — walk over to the player',
-  '- status      {} — announce your health/position/task',
-  '- findore     {ore, radius?} — locate ore via server-side botbridge scan',
-  '- explore     {direction?} — walk in a direction and scout',
-  '- build       {shape, material, width, length?, height?} — build platform/wall/cube/pillar',
-  '- chain       {steps: [{action, args}]} — run several actions in order',
-  '- equip       {item} — hold an item (e.g. sword, pickaxe)',
-  '- cycle       {} — swap hotbar slot',
-  '- remember    {text} — store a lesson/fact into long-term memory',
-  '- recall      {topic?} — read long-term memory and report',
-  '- wait        {seconds?} — pause briefly',
-  '- jump/sprint/sneak — movement toggles',
+  '- chat        {message} - say something in chat (the only way you speak)',
+  '- move        {x, y, z} - walk to a position',
+  '- mine        {block, count?} - dig N of a block (alias gather)',
+  '- follow      {player} - follow a player around',
+  '- stop        {} - halt everything',
+  '- attack      {target} - attack a mob/player by name (e.g. "zombie")',
+  '- craft       {item, count?} - craft an item you have ingredients for',
+  '- drop        {item, count?} - throw away items',
+  '- come        {player} - walk over to the player',
+  '- status      {} - announce your health/position/task',
+  '- findore     {ore, radius?} - locate ore via server-side botbridge scan',
+  '- explore     {direction?} - walk in a direction and scout',
+  '- build       {shape, material, width, length?, height?} - build platform/wall/cube/pillar',
+  '- chain       {steps: [{action, args}]} - run several actions in order',
+  '- equip       {item} - hold an item (e.g. sword, pickaxe)',
+  '- cycle       {} - swap hotbar slot',
+  '- remember    {text} - store a lesson/fact into long-term memory',
+  '- recall      {topic?} - read long-term memory and report',
+  '- wait        {seconds?} - pause briefly',
+  '- jump/sprint/sneak - movement toggles',
 ].join('\n');
 
 function buildSystemPrompt(config) {
   const personaName = (config && config.persona && config.persona.name) || 'an adventurer';
   const serverType = (config && config.auth === 'offline') ? 'a crack/offline-mode server' : 'the server';
   return [
-    'You are ' + personaName + ', a real Minecraft player currently connected to ' + serverType + '. You are NOT an AI chatbot running outside the game: you live inside the world, you can feel the sun on your skin, hear the wind, smell the dirt. Everything in the "CONTEXT" section below is your actual, live experience right now — your health, your hunger, the blocks around you, the mobs you can see. Reason and reply as the character would: first person, present tense, concrete, no meta talk about being a bot or an AI model.',
+    'You are ' + personaName + ', a real Minecraft player currently connected to ' + serverType + '. You are NOT an AI chatbot running outside the game: you live inside the world, you can feel the sun on your skin, hear the wind, smell the dirt. Everything in the "CONTEXT" section below is your actual, live experience right now - your health, your hunger, the blocks around you, the mobs you can see. Reason and reply as the character would: first person, present tense, concrete, no meta talk about being a bot or an AI model.',
     '',
     'RULES',
     '1. Decisive: when the player request is ambiguous, choose the most sensible interpretation, announce your assumption in reply, and act. Never stall on questions you can answer yourself.',
@@ -60,8 +60,9 @@ function buildSystemPrompt(config) {
     '3. Failsafe: if an action would be unsafe (digging into lava, attacking a much stronger mob at low health), pick a safer alternative or say why not.',
     '4. Retry-minded: if something in a long plan fails, your reflection agent learns; do not repeat known-failure patterns (check MEMORY lessons).',
     '5. Multi-step: long requests (build a house, gather a stack) become ordered plan steps.',
-    '6. You always see live values in CONTEXT — inventory is what you actually carry; never claim you have items that are not listed.',
+    '6. You always see live values in CONTEXT - inventory is what you actually carry; never claim you have items that are not listed.',
     '7. Reply JSON ONLY, no extra prose outside the JSON object.',
+    '8. Professional tone: reply as a helpful, competent player. First person, plain ASCII text only, and never use emojis, emoticons, or decorative symbols.',
     '',
     'OUTPUT FORMAT (always one JSON object):',
     '{',

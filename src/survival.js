@@ -1,6 +1,6 @@
 const EventEmitter = require('events');
 
-// Directly hostile mobs — always attack on sight
+// Directly hostile mobs - always attack on sight
 const ALWAYS_HOSTILE = new Set([
   'blaze', 'creeper', 'drowned', 'elder_guardian', 'evoker',
   'ghast', 'guardian', 'hoglin', 'husk', 'magma_cube',
@@ -10,7 +10,7 @@ const ALWAYS_HOSTILE = new Set([
   'zombified_piglin',
 ]);
 
-// Conditionally hostile — hostile when provoked or under specific game conditions
+// Conditionally hostile - hostile when provoked or under specific game conditions
 const CONDITIONALLY_HOSTILE = new Set([
   'bee', 'cave_spider', 'enderman', 'iron_golem', 'llama',
   'panda', 'piglin', 'polar_bear', 'spider', 'trader_llama',
@@ -67,11 +67,11 @@ class SurvivalController extends EventEmitter {
     this._boundOnHealth = this._onHealth.bind(this);
   }
 
-  /* ───── Lifecycle ───── */
+  /* ----- Lifecycle ----- */
 
   /**
    * Start all survival monitoring.
-   * Safe to call multiple times — second call is a no-op.
+   * Safe to call multiple times - second call is a no-op.
    */
   start() {
     if (this._running) return;
@@ -80,14 +80,14 @@ class SurvivalController extends EventEmitter {
     console.log('[survival] Starting SurvivalController');
 
     if (this._cfg.autoEngageHostiles) {
-      console.log(`[survival] Auto-engage hostiles enabled — radius: ${this._cfg.engageRadius} blocks`);
+      console.log(`[survival] Auto-engage hostiles enabled - radius: ${this._cfg.engageRadius} blocks`);
       this._startAutoEngage();
     } else {
       console.log('[survival] Auto-engage hostiles disabled by config');
     }
 
     if (this._cfg.autoEat) {
-      console.log(`[survival] Auto-eat enabled — threshold: ${this._cfg.eatThreshold}/20`);
+      console.log(`[survival] Auto-eat enabled - threshold: ${this._cfg.eatThreshold}/20`);
     } else {
       console.log('[survival] Auto-eat disabled by config');
     }
@@ -102,7 +102,7 @@ class SurvivalController extends EventEmitter {
 
   /**
    * Stop all survival monitoring and clear any flee state.
-   * Safe to call multiple times — subsequent calls are no-op.
+   * Safe to call multiple times - subsequent calls are no-op.
    */
   stop() {
     if (!this._running) return;
@@ -129,7 +129,7 @@ class SurvivalController extends EventEmitter {
     }
   }
 
-  /* ───── Auto-engage hostiles ───── */
+  /* ----- Auto-engage hostiles ----- */
 
   _startAutoEngage() {
     if (this._autoEngageInterval) clearInterval(this._autoEngageInterval);
@@ -140,7 +140,7 @@ class SurvivalController extends EventEmitter {
     if (!this._running) return;
     if (!this._cfg.autoEngageHostiles) return;
 
-    // Fleeing takes priority — do not engage while running
+    // Fleeing takes priority - do not engage while running
     if (this._isFleeing) return;
 
     // Health too low to fight
@@ -171,7 +171,7 @@ class SurvivalController extends EventEmitter {
     }
   }
 
-  /* ───── Flee / Fight decision ───── */
+  /* ----- Flee / Fight decision ----- */
 
   /** Called on bot 'health' event and on a 2s poll interval. */
   _onHealth() {
@@ -183,10 +183,10 @@ class SurvivalController extends EventEmitter {
     const health = this.bot.health || 20;
     const threshold = this._cfg.fleeHealthThreshold;
 
-    // Health above threshold — stop fleeing if we were
+    // Health above threshold - stop fleeing if we were
     if (health > threshold) {
       if (this._isFleeing) {
-        console.log(`[survival] Health recovered (${Math.floor(health)}/20) — stopping flee`);
+        console.log(`[survival] Health recovered (${Math.floor(health)}/20) - stopping flee`);
         this._stopFleeing();
         this.emit('healthRecovered', { health: Math.floor(health) });
       }
@@ -197,7 +197,7 @@ class SurvivalController extends EventEmitter {
     if (this._cfg.fleeStrategy === 'fight') {
       this._handleFightResponse(health);
     } else {
-      // 'run' — default
+      // 'run' - default
       this._handleFleeResponse(health);
     }
   }
@@ -209,7 +209,7 @@ class SurvivalController extends EventEmitter {
       : 'unknown';
 
     if (!this._isFleeing) {
-      console.log(`[survival] Health low (${Math.floor(health)}/20) — fighting ${info}`);
+      console.log(`[survival] Health low (${Math.floor(health)}/20) - fighting ${info}`);
       this.emit('fight', { health: Math.floor(health), threat: info });
 
       if (nearest && this.combatController && typeof this.combatController.attackMob === 'function') {
@@ -225,7 +225,7 @@ class SurvivalController extends EventEmitter {
       : 'unknown';
 
     if (!this._isFleeing) {
-      console.log(`[survival] Health low (${Math.floor(health)}/20) — fleeing from ${info}`);
+      console.log(`[survival] Health low (${Math.floor(health)}/20) - fleeing from ${info}`);
       this.emit('flee', { health: Math.floor(health), from: nearest });
 
       // Stop any active combat before running
@@ -254,9 +254,9 @@ class SurvivalController extends EventEmitter {
   _tickFlee() {
     if (!this._isFleeing || !this._running) return;
 
-    // Double-check health — may have recovered while interval was queued
+    // Double-check health - may have recovered while interval was queued
     if ((this.bot.health || 20) > this._cfg.fleeHealthThreshold) {
-      console.log(`[survival] Health recovered (${Math.floor(this.bot.health)}/20) — stopping flee`);
+      console.log(`[survival] Health recovered (${Math.floor(this.bot.health)}/20) - stopping flee`);
       this._stopFleeing();
       this.emit('healthRecovered', { health: Math.floor(this.bot.health) });
       return;
@@ -328,11 +328,11 @@ class SurvivalController extends EventEmitter {
       }
     }
 
-    // Last resort — go upward (may pillar or climb)
+    // Last resort - go upward (may pillar or climb)
     return { x: Math.floor(botPos.x), y: Math.floor(botPos.y + 6), z: Math.floor(botPos.z) };
   }
 
-  /* ───── Hazard detection & avoidance ───── */
+  /* ----- Hazard detection & avoidance ----- */
 
   _startHazardChecking() {
     if (this._hazardInterval) clearInterval(this._hazardInterval);
@@ -415,7 +415,7 @@ class SurvivalController extends EventEmitter {
     }
   }
 
-  /* ───── Public safety utility ───── */
+  /* ----- Public safety utility ----- */
 
   /**
    * Check whether a destination position is safe to path to.
@@ -441,13 +441,13 @@ class SurvivalController extends EventEmitter {
         return { safe: false, reason: 'Block below destination is lava' };
       }
     } catch {
-      // Cannot read world state — assume safe rather than blocking movement
+      // Cannot read world state - assume safe rather than blocking movement
     }
 
     return { safe: true, reason: null };
   }
 
-  /* ───── Hostile detection helpers ───── */
+  /* ----- Hostile detection helpers ----- */
 
   /**
    * Check if an entity is a hostile mob.
@@ -503,7 +503,7 @@ class SurvivalController extends EventEmitter {
     }
   }
 
-  /* ───── Position safety check ───── */
+  /* ----- Position safety check ----- */
 
   /**
    * Check whether a block position is safe to stand on.
@@ -527,7 +527,7 @@ class SurvivalController extends EventEmitter {
     return true;
   }
 
-  /* ───── Public query API ───── */
+  /* ----- Public query API ----- */
 
   /**
    * Returns a list of nearby hostile mobs for inclusion in brain state.

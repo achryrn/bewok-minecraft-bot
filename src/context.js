@@ -1,12 +1,12 @@
 'use strict';
 /**
- * context.js — builds the FULL Minecraft context handed to the LLM on every
- * query. The goal: the model should feel it is actually inside the game — every
+ * context.js - builds the FULL Minecraft context handed to the LLM on every
+ * query. The goal: the model should feel it is actually inside the game - every
  * observable value (health, hunger, position, biome, time, weather, inventory,
  * equipment, entities, memory, task state) is passed, plus a first-person
  * narrative paragraph describing "where you are right now".
  *
- * Every getter is defensive — a missing bot subsystem degrades gracefully
+ * Every getter is defensive - a missing bot subsystem degrades gracefully
  * instead of crashing the brain.
  */
 
@@ -233,7 +233,7 @@ function narrative(ctx) {
   } else if (ents.mobs.length > 0) {
     parts.push(`${ents.mobs.length} mob(s) visible: ${ents.mobs.map((e) => `${e.name} (${e.distance}m)`).join(', ')}`);
   }
-  if (ctx.currentTask) parts.push(`Currently working on: ${ctx.currentTask.type} (${ctx.currentTask.status}) — progress ${JSON.stringify(ctx.currentTask.progress)}`);
+  if (ctx.currentTask) parts.push(`Currently working on: ${ctx.currentTask.type} (${ctx.currentTask.status}) - progress ${JSON.stringify(ctx.currentTask.progress)}`);
   return parts.join('. ') + '.';
 }
 

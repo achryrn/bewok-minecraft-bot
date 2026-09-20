@@ -67,7 +67,7 @@ class CombatManager extends EventEmitter {
     return this.fighting;
   }
 
-  /** Attack a mob by name — used by SurvivalController auto-engage. */
+  /** Attack a mob by name - used by SurvivalController auto-engage. */
   async attackMob(name) {
     const entity = this.nearestHostileMob();
     if (!entity) return false;

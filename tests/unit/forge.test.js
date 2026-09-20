@@ -94,7 +94,7 @@ describe('ForgeHandler', () => {
       // forgeHandshake3 should only be called once
       expect(forgeHandshake3).toHaveBeenCalledTimes(1);
       // But client.on('error') should be registered once (the forge handshake listener)
-      // plus any from other calls — verify forgeHandshake3 is the idempotency guard
+      // plus any from other calls - verify forgeHandshake3 is the idempotency guard
     });
 
     it('sets handshakeFailed if no client available', () => {

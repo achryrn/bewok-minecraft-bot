@@ -1,6 +1,6 @@
 'use strict';
 /**
- * reflector.js — the "learn from everything" agent.
+ * reflector.js - the "learn from everything" agent.
  *
  * Self-improvement without an LLM round-trip: the reflector watches events
  * (task failures, deaths, stuck navigation, ore discoveries, inventory fills)
@@ -90,10 +90,10 @@ class ReflectorAgent {
     }
     // Domain lessons for the most common actions
     if (action === 'mine' || action === 'gather') {
-      this.memory.learn('Mining failed (' + reasonStr + ') — pick a different spot or tool before retrying.', ['mining']);
+      this.memory.learn('Mining failed (' + reasonStr + ') - pick a different spot or tool before retrying.', ['mining']);
     }
     if (action === 'attack') {
-      this.memory.learn('Combat failed (' + reasonStr + ') — heal, equip a sword, and engage one target at a time.', ['combat']);
+      this.memory.learn('Combat failed (' + reasonStr + ') - heal, equip a sword, and engage one target at a time.', ['combat']);
     }
   }
 
@@ -117,7 +117,7 @@ class ReflectorAgent {
   }
 
   _onNoBlock(block) {
-    this.memory.learn('Could not find ' + block + ' nearby — search wider or choose a different block.', ['gathering', 'search']);
+    this.memory.learn('Could not find ' + block + ' nearby - search wider or choose a different block.', ['gathering', 'search']);
   }
 
   _onOreFound(event) {
