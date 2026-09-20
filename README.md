@@ -5,6 +5,8 @@ A self-improving Minecraft bot (mineflayer) with a natural-language "brain"
 persistent self-improvement memory, and automatic server-version detection -
 built for cracked / offline-mode servers (auth: "offline").
 
+[![CI](https://github.com/achryrn/bewok-minecraft-bot/actions/workflows/ci.yml/badge.svg)](https://github.com/achryrn/bewok-minecraft-bot/actions/workflows/ci.yml)
+
 ## Quick start (double-click)
 
 1. Make sure Node.js LTS is installed: https://nodejs.org
