@@ -1,0 +1,22 @@
+node_modules/
+data/
+logs/
+coverage/
+*.log
+memory.json
+task-state.json
+*.tmp
+
+# copies & backups - regenerable or redundant
+production/
+mods/
+minecraft-bot.zip
+archive/
+
+# local machine settings
+.claude/
+github-token.txt
+
+# OS junk
+.DS_Store
+Thumbs.db

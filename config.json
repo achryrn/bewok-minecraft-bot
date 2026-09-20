@@ -1,0 +1,45 @@
+{
+  "host": "wound-gig.gl.joinmc.link",
+  "port": 25565,
+  "username": "BewokBot",
+  "password": "",
+  "auth": "offline",
+  "version": "1.20.1",
+  "versionAutoDetect": true,
+  "reconnect": true,
+  "reconnectDelay": 5000,
+  "maxReconnectAttempts": 10,
+  "triggerWords": ["bot", "hey bot", "!bot", "bewok"],
+  "claudePath": "claude",
+  "debug": true,
+  "chatCommands": true,
+  "autoEat": true,
+  "autoEatThreshold": 14,
+  "followDistance": 2,
+  "viewDistance": "normal",
+  "taskStatePath": "./data/task-state.json",
+  "ui": {
+    "welcome": true,
+    "maxLineLength": 220
+  },
+  "brain": {
+    "provider": "claude",
+    "claudePath": "claude",
+    "timeoutMs": 30000,
+    "maxRetries": 2,
+    "historySize": 8
+  },
+  "memory": {
+    "enabled": true,
+    "path": "./data/memory.json",
+    "maxLessons": 300
+  },
+  "retry": {
+    "defaultRetries": 2,
+    "retryDelayMs": 1200
+  },
+  "persona": {
+    "name": "a wandering adventurer",
+    "serverType": "cracked"
+  }
+}

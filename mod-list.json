@@ -1,0 +1,132 @@
+[
+  {
+    "modId": "ad_astra",
+    "version": "1.4.1+1.20.1",
+    "source": "immersive_aircraft-1.4.1+1.20.1-forge.jar"
+  },
+  {
+    "modId": "architectury",
+    "version": "2.0.3+mc1.20.1",
+    "source": "justhammers-forge-2.0.3+mc1.20.1.jar"
+  },
+  {
+    "modId": "balm",
+    "version": "14.1.20",
+    "source": "waystones-forge-1.20.1-14.1.20.jar"
+  },
+  {
+    "modId": "bookshelf",
+    "version": "17.1.21",
+    "source": "EnchantmentDescriptions-Forge-1.20.1-17.1.21.jar"
+  },
+  {
+    "modId": "cbc_at",
+    "version": "5.11.4",
+    "source": "createbigcannons-5.11.4-mc.1.20.1-forge.jar"
+  },
+  {
+    "modId": "clumps",
+    "version": "12.0.0.4",
+    "source": "Clumps-forge-1.20.1-12.0.0.4.jar"
+  },
+  {
+    "modId": "crafttweaker",
+    "version": "1.20.1-1.3.2",
+    "source": "FarmersDelight-1.20.1-1.3.2.jar"
+  },
+  {
+    "modId": "create",
+    "version": "0.4.3-1.20.x",
+    "source": "bellsandwhistles-0.4.5-1.20.x-Create6.0+.jar"
+  },
+  {
+    "modId": "embeddium",
+    "version": "1.7.7",
+    "source": "chloride-FORGE-mc1.20.1-v1.7.7.jar"
+  },
+  {
+    "modId": "emi",
+    "version": "1.0.4",
+    "source": "emi_create_schematics-1.0.4.jar"
+  },
+  {
+    "modId": "forge",
+    "version": "2.5.1+mc1.20.1",
+    "source": "appleskin-forge-mc1.20.1-2.5.1.jar"
+  },
+  {
+    "modId": "geckoanimfix",
+    "version": "4.8.4",
+    "source": "geckolib-forge-1.20.1-4.8.4.jar"
+  },
+  {
+    "modId": "geckolib",
+    "version": "5.0pre3",
+    "source": "naturalist-5.0pre3+forge-1.20.1.jar"
+  },
+  {
+    "modId": "hugestructureblocks",
+    "version": "1.0.9",
+    "source": "huge-structure-blocks-1.0.9-forge.jar"
+  },
+  {
+    "modId": "jei",
+    "version": "6.0.8",
+    "source": "create-1.20.1-6.0.8.jar"
+  },
+  {
+    "modId": "lootr",
+    "version": "4.0-462",
+    "source": "Quark-4.0-462.jar"
+  },
+  {
+    "modId": "minecraft",
+    "version": "2.4.1",
+    "source": "BadOptimizations-2.4.1-1.20.1.jar"
+  },
+  {
+    "modId": "mousetweaks",
+    "version": "2.25.1",
+    "source": "MouseTweaks-forge-mc1.20.1-2.25.1.jar"
+  },
+  {
+    "modId": "ponder",
+    "version": "3.11",
+    "source": "effortlessbuilding-1.20.1-3.11.jar"
+  },
+  {
+    "modId": "quark",
+    "version": "1.0-31",
+    "source": "Zeta-1.0-31.jar"
+  },
+  {
+    "modId": "resourcefullib",
+    "version": "3.0.6",
+    "source": "handcrafted-forge-1.20.1-3.0.6.jar"
+  },
+  {
+    "modId": "supermartijn642configlib",
+    "version": "1.1.6",
+    "source": "durabilitytooltip-1.1.6-forge-mc1.20.jar"
+  },
+  {
+    "modId": "terrablender",
+    "version": "19.0.0.96",
+    "source": "BiomesOPlenty-forge-1.20.1-19.0.0.96.jar"
+  },
+  {
+    "modId": "textrues_embeddium_options",
+    "version": "0.7.1",
+    "source": "embeddium-0.3.31+mc1.20.1.jar"
+  },
+  {
+    "modId": "touhou_little_maid",
+    "version": "1.5.1-forge+mc1.20.1",
+    "source": "netmusic-1.5.1-forge+mc1.20.1.jar"
+  },
+  {
+    "modId": "voicechat",
+    "version": "1.20.1-1.5.1",
+    "source": "sound-physics-remastered-forge-1.20.1-1.5.1.jar"
+  }
+]
