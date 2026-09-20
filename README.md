@@ -62,3 +62,4 @@ unit suite (288 tests / 20 suites).
 
 Need a different server? Edit host / port / username in config.json and
 double-click start-bot.bat again.
+<!-- last-verified: 2026-09-20 02:58 UTC -->
