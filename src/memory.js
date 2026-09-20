@@ -25,6 +25,7 @@ class BotMemory {
   constructor(filePath, maxLessons = 300) {
     this.filePath = filePath || './memory.json';
     this.maxLessons = maxLessons || 300;
+    this._seq = 0; // monotonic insertion counter — deterministic recency tie-break
     this.data = {
       facts: {},          // key → value  (durable knowledge)
       notes: [],          // [{id, text, ts, tags:[], count}]  (free-form learnings)
@@ -53,6 +54,7 @@ class BotMemory {
         if (!this.data.locations) this.data.locations = [];
         if (!this.data.history) this.data.history = [];
         if (!this.data.stats) this.data.stats = { tasksCompleted: 0, tasksFailed: 0, deaths: 0, retries: 0, lessonsLearned: 0 };
+        this._seq = this.data.notes.reduce((mx, n) => Math.max(mx, n.seq || 0), 0);
       }
     } catch (err) {
       console.warn('[memory] Could not load memory:', err.message);
@@ -114,6 +116,7 @@ class BotMemory {
       return existing;
     }
     const note = {
+      seq: ++this._seq,
       id: `note_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 6)}`,
       text,
       tags: Array.isArray(tags) ? tags : [],
@@ -141,7 +144,9 @@ class BotMemory {
     notes.sort((a, b) => {
       const scoreA = (a.count || 1) / (1 + (Date.now() - (a.lastSeen || a.ts)) / 86400000);
       const scoreB = (b.count || 1) / (1 + (Date.now() - (b.lastSeen || b.ts)) / 86400000);
-      return scoreB - scoreA;
+      if (scoreB !== scoreA) return scoreB - scoreA;
+      // deterministic tie-break: the most recently learned lesson wins
+      return (b.seq || 0) - (a.seq || 0);
     });
     return notes.slice(0, limit);
   }
